@@ -1,0 +1,53 @@
+﻿@page
+@model PetPals.Pages.Pets.EditModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Edit";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+
+<h4 id="profileheader">Update Pet Information</h4>
+<hr />
+<div class="row" id="textcolour">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Pet.PetID" />
+            <div class="form-group">
+                <label asp-for="Pet.PetName" class="control-label"></label>
+                <input asp-for="Pet.PetName" class="form-control" />
+                <span asp-validation-for="Pet.PetName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Pet.PetType" class="control-label"></label>
+                <select asp-for="Pet.PetType" class="form-control">
+                    <option value="Dog">Dog</option>
+                    <option value="Cat">Cat</option>
+                    <option value="Indoor Bird">Indoor Bird</option>
+                    <option value="Hamster">Hamster</option>
+                    <option value="Horse">Horse</option>
+                    <option value="Ginea Pig">Ginea Pig</option>
+                </select>
+                <span asp-validation-for="Pet.PetType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="hidden" asp-for="Pet.CustomerID" class="form-control" asp-items="ViewBag.CustomerID" readonly="@(true)" />
+                <span asp-validation-for="Pet.CustomerID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" id="button"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)>View your Pets</a>
+</div>
+<div>
+    <a asp-page="../Customers/Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)>View your Profile</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

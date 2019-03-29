@@ -1,0 +1,95 @@
+﻿@page
+@model PetPals.Pages.Sitters.BookingModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h3 id="profileheader">Customer Information</h3>
+
+
+<table class="table">
+    <thead id="button">
+        <tr>
+            <th>
+                Customer
+            </th>
+            <th>
+                Service Booked
+            </th>
+            <th>
+                Date
+            </th>
+            <th>
+                Time
+            </th>
+            <th>
+                Address
+            </th>
+            <th>
+                Phone Number
+            </th>
+            <th></th>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Html.DisplayFor(model => model.Customer.FullName)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Booking.Service)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Booking.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Booking.Time)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Customer.Street)
+                @Html.DisplayFor(model => model.Customer.Town)
+                @Html.DisplayFor(model => model.Customer.Postcode)
+            </td>
+            <td>
+                @Html.DisplayFor(model => model.Customer.Phonenumber)
+            </td>
+          
+
+        </tr>
+    </tbody>
+</table>
+
+
+<table class="table">
+    <thead id="button">
+        <tr>
+            <th>
+                Pet
+            </th>
+            <th>
+                Name
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var p in Model.Pets)
+        {
+            if (p.CustomerID == Model.Customer.ID)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => p.PetType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => p.PetName)
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-page="./Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)>Back to profile</a>
+</div>

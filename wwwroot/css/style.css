@@ -1,0 +1,78 @@
+﻿#searchoptions {
+    text-align: center;
+    color: mediumpurple;
+}
+
+.navbar-header {
+    background-color: mediumpurple;
+}
+
+#topbar {
+    background-color: mediumpurple;
+}
+
+
+.nav navbar-nav {
+    color: mediumpurple;
+}
+
+
+#howitworks {
+    font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    color: mediumpurple;
+}
+
+#button {
+    background-color: mediumpurple;
+    color: white;
+}
+
+#paypal {
+    background-color: yellow;
+    color: blue;
+}
+
+#profileheader {
+    color: indianred;
+}
+
+.textcolour {
+    color: indianred;
+}
+#topbartext {
+    color:white;
+}
+
+#payment {
+    display: inline-block;
+}
+
+#buttondesign {
+    background-color: mediumpurple;
+    color: white;
+    padding: 15px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+}
+
+#profilebutton {
+    background-color: peachpuff;
+    color: white;
+    padding: 15px 25px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    margin: 10px 15px;
+}
+
+#profiletable {
+    margin: 10px 10px;
+}
+
+.ordercomplete {
+    margin: auto;
+    width: 100%;
+    padding: 200px;
+   
+}

@@ -1,0 +1,17 @@
+﻿@page
+@model PetPals.Pages.OrderCompleteModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "OrderComplete";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+
+<div class="ordercomplete">
+    <h2 id="profileheader">Booking Complete</h2>
+
+    <div id="profilebutton">
+        <a asp-page="Customers/Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)>Return to your profile</a>
+    </div>
+
+</div>

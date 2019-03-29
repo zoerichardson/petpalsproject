@@ -1,0 +1,50 @@
+﻿@page
+@using Microsoft.AspNetCore.Http
+@model PetPals.Pages.Pets.IndexModel
+
+@{
+    ViewData["Title"] = "Add Pets";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h2 id="profileheader">Your Pets</h2>
+
+<p>
+    <a asp-page="Create" id="profileheader">Add New Pet</a>
+</p>
+<table class="table">
+    <thead id="button">
+        <tr>
+            <th>
+                Name of Your Pet
+            </th>
+            <th>
+                Pet
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Pets)
+        {
+            @if (item.CustomerID == Convert.ToInt32(@HttpContext.Session.GetString(PetPals.Pages.Customers.EditModel.SessionKeyCustomerID)))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PetName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PetType)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" id="profileheader" asp-route-id="@item.PetID">Update Pet Information</a> |
+                        <a asp-page="./Delete" id="profileheader" asp-route-id="@item.PetID">Remove Pet</a>
+                    </td>
+                </tr>
+                }
+            }
+        </tbody>
+</table>
+
+<div>
+    <a asp-page="../Customers/Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)>Back to your Profile</a>
+</div>

@@ -1,0 +1,37 @@
+﻿@page
+@model PetPals.Pages.AnimalExperiences.DeleteModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Remove Experience";
+}
+
+<!DOCTYPE html>
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h2 id="profileheader">Delete</h2>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+
+    <h3>Are you sure you want to delete this?</h3>
+    <div  id="profileheader">
+        <hr />
+        <dl class="dl-horizontal">
+            <dt>
+                @Html.DisplayNameFor(model => model.AnimalExperience.AnimalType)
+            </dt>
+            <dd>
+                @Html.DisplayFor(model => model.AnimalExperience.AnimalType)
+            </dd>
+        </dl>
+
+        <form method="post">
+            <input type="hidden" asp-for="AnimalExperience.ExperienceID" />
+            <input type="submit" value="Delete" class="btn btn-default" id="button" /> |
+            <a asp-page="./Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)>Back</a>
+
+        </form>
+    </div>
+</body>
+</html>

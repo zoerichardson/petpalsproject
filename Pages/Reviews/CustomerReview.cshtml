@@ -1,0 +1,58 @@
+﻿@page
+@model PetPals.Pages.Reviews.CustomerReviewModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Reviews";
+}
+
+
+<h2 id="profileheader">Your Reviews</h2>
+
+<a asp-page="Create" id="profileheader">Write New Review</a>
+
+<table class="table">
+    <thead id="button">
+        <tr>
+            <th>
+                Reviews and Ratings
+            </th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model.Reviews)
+        {
+            @if (i.CustomerID == Convert.ToInt32(@HttpContext.Session.GetString(PetPals.Pages.Customers.EditModel.SessionKeyCustomerID)))
+            {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => i.Description)
+            </td>
+            <td>
+
+
+                @for (var j = 0; j < i.Rating; j++)
+                {
+
+                    <img src="@Url.Content("~/images/goldstar.png")" height="30" width="30" />
+                }
+
+            </td>
+            <td>
+                <bo>About:</bo> @Html.DisplayFor(modelItem => i.Sitter.FullName)
+            </td>
+
+            <td>
+                <a asp-page="./Edit" id="profileheader" asp-route-id="@i.ReviewID">Edit</a> |
+                <a asp-page="./Delete" id="profileheader" asp-route-id="@i.ReviewID">Delete</a>
+            </td>
+        </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+<a asp-page="../Customers/Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)>Back to your Profile</a>

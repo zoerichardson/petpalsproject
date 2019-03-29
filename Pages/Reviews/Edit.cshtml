@@ -1,0 +1,55 @@
+﻿@page
+@model PetPals.Pages.Reviews.EditModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Edit";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+
+<h4 id="profileheader">Edit Your Review</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Review.ReviewID" />
+            <div class="form-group">
+                <label asp-for="Review.Description" class="control-label"></label>
+                <input asp-for="Review.Description" class="form-control" />
+                <span asp-validation-for="Review.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Review.Rating" class="control-label"></label>
+                <select asp-for="Review.Rating" class="form-control" required>
+                    <option value="">-- Select Rating --</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                </select>
+                <span asp-validation-for="Review.Rating" class="text-danger"></span>
+            </div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="Review.CustomerID" class="form-control" asp-items="ViewBag.CustomerID" />
+                    <span asp-validation-for="Review.CustomerID" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="Review.SitterID" class="form-control" asp-items="ViewBag.SitterID" />
+                    <span asp-validation-for="Review.SitterID" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-default" id="button" />
+                </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./CustomerReview" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)>Back to List</a>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,45 @@
+﻿@page
+@model PetPals.Pages.AnimalExperiences.CreateModel
+@using Microsoft.AspNetCore.Http
+@{
+    
+        ViewData["Title"] = "Add Animal";
+   
+}
+
+<!DOCTYPE html>
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h4 id="profileheader">Add what animals you have experience with</h4>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <hr />
+    <div class="row" id="textcolour">
+        <div class="col-md-4">
+            <form method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label id="textcolour">Please enter animal. E.g. Dogs, Cats</label>
+                    <input asp-for="AnimalExperience.AnimalType" class="form-control" />
+                    <span asp-validation-for="AnimalExperience.AnimalType" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="hidden" asp-for="AnimalExperience.SitterID" class="form-control" value="@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)" />
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-default" id="button"/>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div>
+        <a asp-page="Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)>Back to Animal Experience</a>
+    </div>
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+</body>
+</html>

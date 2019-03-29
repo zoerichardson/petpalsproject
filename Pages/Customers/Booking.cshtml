@@ -1,0 +1,65 @@
+﻿@page
+@model PetPals.Pages.Customers.BookingModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h3 id="profileheader">Your Bookings</h3>
+
+<div>
+    <table class="table">
+        <thead  id="button">
+            <tr>
+                <th>
+                    Sitter Booked
+                </th>
+                <th>
+                    Service Booked
+                </th>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Time
+                </th>
+                <th>
+                    Cost
+                </th>
+                <th></th>
+            </thead>
+        <tbody>
+            @foreach (var item in Model.Bookings)
+            {
+                if (item.CustomerID == Convert.ToInt32(@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(model => item.Sitter.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Service)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Time)
+                        </td>
+                        <td>
+                            £ @Html.DisplayFor(modelItem => item.TotalCost)
+                        </td>
+                        <td>
+                            <a asp-page="./DeleteBooking" id="profileheader" asp-route-id="@item.BookingID">Cancel Booking</a>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+</table>
+
+</div>
+<div>
+    <a asp-page="./Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)>Back to profile</a>
+</div>

@@ -1,0 +1,50 @@
+﻿@page
+@model PetPals.Pages.Reviews.SitterReviewModel
+@using Microsoft.AspNetCore.Http
+
+@{
+    ViewData["Title"] = "Reviews";
+}
+
+<h2 id="profileheader">Your Reviews</h2>
+
+<table class="table">
+    <thead id="button">
+        <tr>
+            <th>
+                Reviews and Ratings
+            </th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Model.Reviews)
+        {
+            @if (i.SitterID == Convert.ToInt32(@HttpContext.Session.GetString(PetPals.Pages.Sitters.EditModel.SessionKeySitterID)))
+            {
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => i.Description)
+            </td>
+            <td>
+                
+                    
+                    @for (var j = 0; j < i.Rating; j++)
+                    {
+
+                        <img src="@Url.Content("~/images/goldstar.png")" height="30" width="30" />
+                    }
+                
+            </td>
+            <td>
+                <b>Written By: </b> @Html.DisplayFor(modelItem => i.Customer.FullName)
+            </td>
+        </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<a asp-page="../Sitters/Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)>Back to your Profile</a>

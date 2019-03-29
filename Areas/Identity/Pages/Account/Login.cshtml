@@ -1,0 +1,42 @@
+﻿@page
+@model LoginModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Log in";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h2 id="profileheader">Log In</h2>
+<div class="row">
+    <div class="col-md-4">
+        <section>
+            <form method="post">
+                <hr />
+                <div asp-validation-summary="All" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="Input.Email"></label>
+                    <input asp-for="Input.Email" class="form-control" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Input.Password"></label>
+                    <input asp-for="Input.Password" class="form-control" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                </div>
+               
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default" id="button">Log in</button>
+                </div>
+                <div class="form-group">
+                    <p>
+                        <a asp-page="./Register" id="profileheader" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                    </p>
+                </div>
+            </form>
+        </section>
+    </div>
+    
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,53 @@
+
+@using System
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Mvc;
+
+
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService AuthorizationService
+
+@if (SignInManager.IsSignedIn(User))
+{
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
+        <ul class="nav navbar-nav navbar-right">
+
+            <li>
+                <a asp-area="Identity" id="topbartext" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>
+            </li>
+            @if ((await AuthorizationService.AuthorizeAsync(User, "SitterProfile")).Succeeded)
+            {
+                <li>
+                    <a asp-page="/Sitters/Index"><b id="topbartext">Your Dashboard</b></a>
+
+                </li>
+            }
+            else 
+            {
+
+                <li>
+                    <a asp-page="/Customers/Index"><b id="topbartext">Your Profile</b></a>
+
+                </li>
+            }
+
+                <li>
+                    <button type="submit" class="btn btn-link navbar-btn navbar-link"><b id="topbartext">Logout</b></button>
+                </li>
+            </ul>
+    </form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li><a asp-area="Identity" asp-page="/Account/SitterRegister"><b id="topbartext">Become A Sitter</b></a></li>
+        <li><a asp-area="Identity" asp-page="/Account/Register"><b id="topbartext">Register</b></a></li>
+        <li><a asp-area="Identity" asp-page="/Account/Login"><b id="topbartext">Login</b></a></li>
+    </ul>
+
+}
+

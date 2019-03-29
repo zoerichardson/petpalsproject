@@ -1,0 +1,40 @@
+﻿@page
+@model PetPals.Areas.Identity.Pages.Account.SitterRegisterModel
+@{
+    ViewData["Title"] = "Sitter Register";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h2 id="profileheader" style="text-align:center">Register to become a pet sitter</h2>
+
+<div class="row" style="text-align:center">
+    
+        <form asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <h4 id="profileheader">Create a new account.</h4>
+            <hr />
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.Email"></label><br>
+                <input  asp-for="Input.Email" size="35" />
+                @Html.DisplayNameFor(m => m.Input.EmailAddress)<br>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Password"></label><br>
+                <input asp-for="Input.Password" size="46"/>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.ConfirmPassword"></label><br>
+                <input asp-for="Input.ConfirmPassword" size="46"/>
+                <span asp-validation-for="Input.ConfirmPassword" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-default" id="button">Register</button>
+        </form>
+
+</div>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

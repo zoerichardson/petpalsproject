@@ -1,0 +1,190 @@
+﻿@page
+@model PetPals.Pages.SearchModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Search";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<head>
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+        /* Always set the map height explicitly to define the size of the div
+        * element that contains the map. */
+        #map {
+            height: 400px;
+            width: 400px;
+        }
+    </style>
+</head>
+<h3 id="profileheader" style="text-align:center">Matches</h3>
+<body>
+    <h4 id="message" class="textcolour"></h4>
+    <div>
+        <form method="post">
+            <table class="table">
+
+                <thead id="button">
+                    <tr>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Location
+                        </th>
+                        <th>
+                            Services Provided
+                        </th>
+                        <th>
+                            Price
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    @{
+                        foreach (var m in Model.Services)
+                        {
+                            if (m.ServiceType == @HttpContext.Session.GetString(PetPals.Pages.Bookings.CreateModel.SessionKeyServiceChoice))
+                            {
+                                foreach (var s in Model.Sitters)
+                                {
+                                    if (m.SitterID == s.ID)
+                                    {
+                                        if (s.Town == @HttpContext.Session.GetString(PetPals.Pages.Bookings.CreateModel.SessionKeyLocationChoice))
+                                        {
+
+                                            <tr>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => s.FullName)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => s.Town)
+                                                </td>
+                                                <td>
+                                                    @Html.DisplayFor(modelItem => m.ServiceType)
+                                                </td>
+                                                <td>
+                                                    £ @Html.DisplayFor(modelItem => m.Price)
+
+                                                </td>
+                                                <td>
+                                                    <a asp-page="Profile" asp-route-id="@s.ID" id="profileheader">View Profile</a>
+                                                </td>
+                                            </tr>
+
+                                        }
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+                    }
+
+                </tbody>
+
+            </table>
+
+        </form>
+    </div>
+    <input id="location" type="hidden" value=" @HttpContext.Session.GetString(PetPals.Pages.Bookings.CreateModel.SessionKeyLocationChoice)" />
+
+    <div>
+        <a asp-page="/Menu" id="profileheader">Search Again</a>
+    </div>
+
+
+
+    @section Scripts {
+        @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    }
+
+    <div id="map"></div>
+
+    <script>
+        var locations = [];
+
+         @{
+
+             foreach (var m in Model.Services)
+             {
+                 if (m.ServiceType == HttpContext.Session.GetString(PetPals.Pages.Bookings.CreateModel.SessionKeyServiceChoice))
+                 {
+                     foreach (var s in Model.Sitters)
+                     {
+                         if (m.SitterID == s.ID)
+                         {
+                             if (s.Town == HttpContext.Session.GetString(PetPals.Pages.Bookings.CreateModel.SessionKeyLocationChoice))
+                             {
+
+                                @:locations.push(['@s.Town', '@s.Postcode']);
+                             }
+                         }
+                     }
+                 }
+             }
+    }
+
+        if (locations.length == 0) {
+            document.getElementById("message").innerHTML = "No sitters available, please seach again";
+        }
+        else {
+            var map;
+            function initMap() {
+                map = new google.maps.Map(document.getElementById('map'), {
+                    zoom: 10,
+                    center: new google.maps.LatLng(55.3781, -3.4360),
+                    mapTypeId: google.maps.MapTypeId.ROADMAP
+                });
+
+                var infowindow = new google.maps.InfoWindow();
+                var geocoder = new google.maps.Geocoder();
+
+                var marker, i;
+
+                for (i = 0; i < locations.length; i++) {
+                    geocodeAddress(locations[i]);
+                }
+
+                function geocodeAddress(location) {
+                    geocoder.geocode({ 'address': location[1] }, function (results, status) {
+                        //alert(status);
+                        if (status == google.maps.GeocoderStatus.OK) {
+                            //alert(results[0].geometry.location);
+                            map.setCenter(results[0].geometry.location);
+                            createMarker(results[0].geometry.location, location[0] + "<br>" + location[1]);
+                        }
+                        else {
+                            alert("some problem in geocode" + status);
+                        }
+                    });
+                }
+
+                function createMarker(latlng, html) {
+                    marker = new google.maps.Marker({
+                        position: latlng,
+                        map: map,
+                    });
+
+                    google.maps.event.addListener(marker, 'mouseover', function () {
+                        infowindow.setContent(html);
+                        infowindow.open(map, marker);
+                    });
+
+                    google.maps.event.addListener(marker, 'mouseout', function () {
+                        infowindow.close();
+                   
+                    });
+                }
+
+            }
+        }
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBzwwqO4ILnAi8PZ5CEQMhapi2RLs9V5cs&callback=initMap"
+            async defer></script>
+</body>

@@ -1,0 +1,211 @@
+﻿@page
+@model PetPals.Pages.ProfileModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h3 id="profileheader" style="text-align:center">@HttpContext.Session.GetString(ProfileModel.SessionKeySelectedSitterFullname) 's Profile</h3>
+
+<div style="text-align:right">
+    @foreach (var item in Model.SocialLinks)
+    {
+        if (item.SitterID == Model.Sitter.ID)
+        {
+            if (item.Facebook != null)
+            {
+        <a class=Profile-shareLink href="@Html.DisplayFor(modelItem => item.Facebook)">
+            <img class=Profile-shareIcon src="~/images/facebook.png" style="width:50px;height:50px;">
+        </a>
+            }
+            if (item.Twitter != null)
+            {
+        <a class=Profile-shareLink href="@Html.DisplayFor(modelItem => item.Twitter)">
+            <img class=Profile-shareIcon src="~/images/twitter.png" style="width:50px;height:50px;">
+        </a>
+            }
+            if (item.Instagram != null)
+            {
+
+        <a class=Profile-shareLink href="@Html.DisplayFor(modelItem => item.Instagram)">
+            <img class=Profile-shareIcon src="~/images/instagram.jpg" style="width:50px;height:50px;">
+        </a>
+            }
+        }
+    }
+</div>
+
+<div>
+    <table class="table">
+        <thead id="button">
+            <tr>
+                <th>
+                    About Me
+                </th>
+                <th>
+                    My Area
+                </th>
+                <th>
+                    Contact Information
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            <tr>
+                <td>
+                    @HttpContext.Session.GetString(ProfileModel.SessionKeySelectedSitterDescription)
+                </td>
+                <td>
+                    @HttpContext.Session.GetString(ProfileModel.SessionKeySelectedSitterTown)
+                </td>
+                <td>
+                    @HttpContext.Session.GetString(ProfileModel.SessionKeySelectedSitterPhonenumber)
+                </td>
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <table class="table">
+        <thead id="button">
+            <tr>
+                <th>
+                    Animal Experience
+                </th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @{
+
+                foreach (var item in Model.Experiences)
+                {
+
+                    if (item.SitterID == Model.Sitter.ID)
+                    { 
+                            <tr>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.AnimalType)
+                                </td>
+                            </tr>                      
+
+                    }
+
+                }
+
+            }
+        </tbody>
+    </table>
+</div>
+
+<div>
+    <table class="table">
+        <thead id="button">
+            <tr>
+                <th>
+                    Full list of services provided 
+                </th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @{
+                var serviceprice = 0;
+                foreach (var item in Model.Services)
+                {
+
+                    if (item.SitterID == Model.Sitter.ID)
+                    {
+                        serviceprice = Convert.ToInt32(item.Price);
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ServiceType)
+                            </td>
+                            <td>£ @serviceprice</td>
+
+                        </tr>
+                    }
+                }
+
+            }
+        </tbody>
+    </table>
+</div>
+
+
+<div>
+    <table class="table">
+        <thead id="button">
+            <tr>
+                <th>
+                    Reviews
+                </th>
+                <th></th>
+            </tr>
+
+        </thead>
+        <tbody>
+
+            @{
+                var Rating = 0;
+                var averageRating = 0;
+                foreach (var item in Model.Reviews)
+                {
+                    if (item.SitterID == Model.Sitter.ID)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Description)
+                            </td>
+                            <td>
+                                By: @Html.DisplayFor(modelItem => item.Customer.FullName)
+                            </td>
+                        </tr>
+                        Rating = Rating + item.Rating;
+                    }
+                }
+                var count = Model.Reviews.Count(i => i.SitterID == Model.Sitter.ID);
+                if (count == 0)
+                {
+                    <tr>
+                    <td>No reviews yet</td>
+                    </tr>
+                }
+                else
+                {
+                    averageRating = Rating / count;
+                <tr>
+                    <td>
+                        @for (var i = 0; i < averageRating; i++)
+                        {
+                            <img src="~/images/goldstar.png" height="42" width="42">
+                        }
+                    </td>
+                </tr>
+                    }
+                }
+
+        </tbody>
+    </table>
+</div>
+
+<form method="post" style="text-align:right">
+    <div>
+        <button type="submit" class="btn btn-default" id="button">Book this sitter</button>
+    </div>
+</form>
+
+
+<div>
+    <a asp-page="Search" id="profileheader">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

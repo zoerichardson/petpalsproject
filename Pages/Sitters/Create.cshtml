@@ -1,0 +1,66 @@
+﻿@page
+@model PetPals.Pages.Sitters.CreateModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Create";
+  
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+
+<hr />
+<div class="row" id="textcolour">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Sitter.FirstName" class="control-label"></label>
+                <input asp-for="Sitter.FirstName" class="form-control" />
+                <span asp-validation-for="Sitter.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sitter.Surname" class="control-label"></label>
+                <input asp-for="Sitter.Surname" class="form-control" />
+                <span asp-validation-for="Sitter.Surname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sitter.Street" class="control-label"></label>
+                <input asp-for="Sitter.Street" class="form-control" />
+                <span asp-validation-for="Sitter.Street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sitter.Town" class="control-label"></label>
+                <input asp-for="Sitter.Town" class="form-control" />
+                <span asp-validation-for="Sitter.Town" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sitter.Postcode" class="control-label"></label>
+                <input asp-for="Sitter.Postcode" class="form-control" />
+                <span asp-validation-for="Sitter.Postcode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Sitter.Phonenumber" class="control-label"></label>
+                <input asp-for="Sitter.Phonenumber" class="form-control" required
+            minlength="11" maxlength="11" />
+                <span asp-validation-for="Sitter.Phonenumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label> Description of yourself and your services</label>
+                <input asp-for="Sitter.Description" class="form-control" required/>
+                <span asp-validation-for="Sitter.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Catchment Area of how far you are willing to travel (Miles)</label>
+                <input asp-for="Sitter.CatchmentArea" class="form-control" />
+                <span asp-validation-for="Sitter.CatchmentArea" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-default" id="button" />
+            </div>
+        </form>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

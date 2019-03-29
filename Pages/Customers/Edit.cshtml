@@ -1,0 +1,67 @@
+﻿@page
+@model PetPals.Pages.Customers.EditModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Edit";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+
+
+<h4 id="profileheader">Update your details</h4>
+<hr />
+<div class="row" id="textcolour">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Customer.ID" />
+            <div class="form-group">
+                <label asp-for="Customer.FirstName" class="control-label"></label>
+                <input asp-for="Customer.FirstName" class="form-control" />
+                <span asp-validation-for="Customer.FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer.Surname" class="control-label"></label>
+                <input asp-for="Customer.Surname" class="form-control" />
+                <span asp-validation-for="Customer.Surname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer.Street" class="control-label"></label>
+                <input asp-for="Customer.Street" class="form-control" />
+                <span asp-validation-for="Customer.Street" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer.Town" class="control-label"></label>
+                <input asp-for="Customer.Town" class="form-control" />
+                <span asp-validation-for="Customer.Town" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer.Postcode" class="control-label"></label>
+                <input asp-for="Customer.Postcode" class="form-control" />
+                <span asp-validation-for="Customer.Postcode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Customer.Phonenumber" class="control-label"></label>
+                <input asp-for="Customer.Phonenumber" class="form-control"  required
+            minlength="11" maxlength="11"  />
+                <span asp-validation-for="Customer.Phonenumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label>Card Number (16 digits from your card)</label>
+                <input asp-for="Customer.CardNumber" class="form-control" required
+            minlength="16" maxlength="16" />
+                <span asp-validation-for="Customer.CardNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" id="button" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)>Back to your Profile</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

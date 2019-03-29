@@ -1,0 +1,69 @@
+﻿@page
+@model PetPals.Pages.Reviews.IndexModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Reviews";
+}
+
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+
+<h2 id="profileheader">Customer Reviews</h2>
+
+    <div>
+        <table class="table">
+            <thead id="button">
+                <tr>
+                    <th>
+                       Review and Ratings
+                    </th>
+                    <th></th>
+                    <th>
+                    </th>
+                    <th>
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                @{ 
+                   
+                    foreach (var i in Model.Reviews)
+                    {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => i.Description)
+                    </td>
+                    <td>
+                   
+                            @for (var j = 0; j < i.Rating; j++)
+                            {
+
+                            <img src="@Url.Content("~/images/goldstar.png")" height="30" width="30" />
+                                }                        
+                    </td>
+
+                    <td>
+                        <b>Written by:</b> @Html.DisplayFor(modelItem => i.Customer.FullName)
+                    </td>
+                    <td>
+                        <b>About:</b> @Html.DisplayFor(modelItem => i.Sitter.FullName)
+                    </td>
+                </tr>
+                        }
+                    }
+            </tbody>
+        </table>
+    </div>
+
+
+
+    <h3 id="profileheader">Tweets from our customers</h3>
+
+    <a class="twitter-timeline" data-width="600" data-height="400" href="https://twitter.com/B00307204?ref_src=twsrc%5Etfw"></a>
+    <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+
+
+
+
+

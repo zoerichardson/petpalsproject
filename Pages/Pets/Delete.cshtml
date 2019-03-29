@@ -1,0 +1,34 @@
+﻿@page
+@model PetPals.Pages.Pets.DeleteModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Delete";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h2 id="profileheader">Delete</h2>
+
+<h3 id="profileheader">Are you sure you want to delete this?</h3>
+<div>
+    <h4 id="profileheader">Pet</h4>
+    <hr />
+    <dl class="dl-horizontal" id="textcolour">
+        <dt>
+            @Html.DisplayNameFor(model => model.Pet.PetName)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Pet.PetName)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Pet.PetType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Pet.PetType)
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="Pet.PetID" />
+        <input type="submit" value="Delete" class="btn btn-default" id="button"/> |
+        <a asp-page="./Index" id="profileheader" asp-route-id=@HttpContext.Session.GetInt32(EditModel.SessionKeyPetID)>Pet Profile</a>
+    </form>
+</div>

@@ -1,0 +1,168 @@
+﻿@page
+@model PetPals.Pages.WeatherModel
+@using Microsoft.AspNetCore.Http
+@using Newtonsoft.Json.Linq;
+@using System.Net.Http;
+@{
+    ViewData["Title"] = "Weather";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h2 id="profileheader" style="text-align:center">Weather</h2>
+<p id="profileheader" style="text-align:center">Help organise your plans by checking the weather to allow you to know when is best to book a walk</p>
+
+<div class="row" style="text-align:center">
+
+    <form method="post">
+        <div class="form-group">
+            <input asp-for="Input.SelectedCity" class="form-control" value="Enter Location" required />
+            <span asp-validation-for="Input.SelectedCity" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Search" id="button" class="btn btn-default" />
+        </div>
+    </form>
+</div>
+
+<body>
+    <input type="hidden" id="location" value="@HttpContext.Session.GetString(PetPals.Pages.WeatherModel.SessionKeyCity)" />
+    <div class="container">
+        <h4 id="profileheader">@HttpContext.Session.GetString(PetPals.Pages.WeatherModel.SessionKeyCity)</h4>
+        <div class="row">
+            <!-- Column for the weather and forecast info -->
+            <div class="col-md-6">
+                <!-- Panel for forecast info -->
+                <div id="forecast" class="panel panel-info">
+                    <div id="button" class="panel-heading">
+                        <h3 id="button" class="panel-title">5 Day Forecast</h3>
+                    </div>
+                    <div class="panel-body">
+                        <div class="row row-eq-height"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script>
+        $(function () {
+            
+            showWeatherData()
+        })
+        function showWeatherData() {
+            // display the coordinates
+            var location = document.getElementById("location").value;
+            $.ajax({
+                type: 'GET',
+                url: 'https://api.openweathermap.org/data/2.5/forecast?appid=e382b1005699ea1bc9b7513d3441db04&q=' + location + "&units=metric",
+                dataType: 'jsonp',
+                jsonp: 'callback',
+                jsonpCallback: 'loadForecast',
+                crossDomain: true,
+                success: function (data) {
+                    console.log("Forecast API call successful!");
+                },
+                error: function (error) {
+                    console.log("Forecast API call failed! Error: " + error.message);
+                }
+            });
+        }
+        function showError(error) {
+            switch (error.code) {
+                case error.PERMISSION_DENIED:
+                    $("#map").append("<p>Error: User denied permission.</p>");
+                    break;
+                case error.POSITION_UNAVAILABLE:
+                    $("#map").append("<p>Error: User's position is unavailable.</p>");
+                    break;
+                case error.TIMEOUT:
+                    $("#map").append("<p>Error: The request timed out.</p>");
+                    break;
+                case error.UNKNOWN_ERROR:
+                    $("#map").append("<p>Error: Unknown.</p>");
+                    break;
+            }
+        }
+
+        function loadForecast(data) {
+            // keep track of which hour/day forecast is being displayed
+            var count = 0;
+            // display the first four
+            while (count < 4) {
+                // add panels for each one inside the forecast panel
+                $("#forecast .row").append(
+                    "<div class='col-md-3'>" +
+                    "<div class='panel panel-default text-center'>" +
+                    "<div class='panel-heading'>" +
+                    "<h3 class='panel-title'>" + getTime(data.list[count].dt) + "</h3>" +
+                    "</div>" +
+                    "<div class='panel-body'>" +
+                    "<h4>" + data.list[count].main.temp + " &#8451;</h4>" +
+                    "<img class='center-block' src=http://openweathermap.org/img/w/" + data.list[count].weather[0].icon + ".png>" +
+                    "<p class='text-capitalize'>" + data.list[count].weather[0].description + "</p>" +
+                    "</div>" +
+                    "</div>" +
+                    "</div>"
+                );
+                // increment the counter
+                count++;
+            }
+
+            // scroll through the forecast every 3 seconds
+            var timer = setInterval(function () {
+                // animate the removal by fading out the first column
+                $("#forecast .col-md-3:first").fadeOut();
+                // wait 1 second for the animations to complete, then remove the last forecast
+                setTimeout(function () {
+                    $("#forecast .col-md-3:first").remove();
+                    // add a new forecast to the right
+                    $("#forecast .row").append(
+                        "<div class='col-md-3'>" +
+                        "<div class='panel panel-default text-center'>" +
+                        "<div class='panel-heading'>" +
+                        "<h3 class='panel-title'>" + getTime(data.list[count].dt) + "</h3>" +
+                        "</div>" +
+                        "<div class='panel-body'>" +
+                        "<h4>" + data.list[count].main.temp + " &#8451;</h4>" +
+                        "<img class='center-block' src=http://openweathermap.org/img/w/" + data.list[count].weather[0].icon + ".png>" +
+                        "<p class='text-capitalize'>" + data.list[count].weather[0].description + "</p>" +
+                        "</div>" +
+                        "</div>" +
+                        "</div>"
+                    );
+                    // increment the counter
+                    count++;
+                    // hide them by changing display to none
+                    $("#forecast .col-md-3:last").css("display", "none");
+                    // animate them by using the fadeIn function
+                    $("#forecast .col-md-3:last").fadeIn();
+                    // stop the function from running when it has reached the last forecast
+                    if (count == data.list.length - 1)
+                        clearTimeout(timer);
+                }, 500);
+            }, 3000);
+        }
+
+        // this function creates a Date object for the specified unixTimeString to properly format the date and time
+        // information that will be displayed in the forecast panels
+        function getTime(unixTimeString) {
+            var date = new Date(unixTimeString * 1000); // multiply by 1000 to get milliseconds
+            var hour = date.getHours();
+            var hourString;
+            if (hour == 0)
+                hourString = "12 AM";
+            else if (hour < 12)
+                hourString = hour + " AM";
+            else if (hour == 12)
+                hourString = "12 PM";
+            else
+                hourString = (hour - 12) + " PM";
+
+            return hourString + "</br><small>" + date.toLocaleDateString() + "</small>";
+        }
+
+
+
+
+    </script>
+</body>

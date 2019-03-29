@@ -1,0 +1,121 @@
+﻿@page
+@using Microsoft.AspNetCore.Http
+@model PetPals.Pages.PaymentModel
+@{
+    ViewData["Title"] = "Payment";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+
+<h2 id="profileheader">Select either payment option and then select the confirm and continue button</h2>
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h2 id="profileheader">Payment</h2>
+
+
+<h4 id="profileheader">Pay with your card </h4>
+<hr />
+<div id="payment" style="text-align:left">
+    <label>Card Number</label>
+    <input asp-for="Customer.CardNumber" class="form-control" maxlength="16" size="10" required value="@HttpContext.Session.GetString(PetPals.Pages.PaymentModel.SessionKeyCardNo)" />
+
+    <label class="control-label">CSC</label>
+    <input type="text" maxlength="3" size="3" style="width: 70px;" required />
+
+    <label>Expiry Month</label>
+    <select style="width:100px;" required>
+        <option value="01">01</option>
+        <option value="02">02</option>
+        <option value="03">03</option>
+        <option value="04">04</option>
+        <option value="05">05</option>
+        <option value="06">06</option>
+        <option value="07">07</option>
+        <option value="08">08</option>
+        <option value="09">09</option>
+        <option value="10">10</option>
+        <option value="11">11</option>
+        <option value="12">12</option>
+    </select>
+    <label>Expiry Year</label>
+    <select style="width:100px;" required>
+        <option value="19">19</option>
+        <option value="20">20</option>
+        <option value="21">21</option>
+        <option value="22">22</option>
+        <option value="23">23</option>
+        <option value="24">24</option>
+    </select>
+
+</div>
+
+
+
+@{
+    var serviceprice = HttpContext.Session.GetInt32(PetPals.Pages.PaymentModel.SessionKeyPrice);
+}
+
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <script src="https://www.paypal.com/sdk/js?client-id=Ac1AWiK3Gcci0zJe9zeUR1oTKB8OMbXQORJICm8P_4mozNI8nMkebZR2ZC6l-NMIfXhjp0m6x-dUmWAC&currency=GBP">
+    </script>
+</head>
+<body>
+    <h4 id="profileheader">Pay by PayPal</h4>
+    <hr />
+    <div>
+        <div id="paypal-button-container"></div>
+     
+        <script>
+
+
+                paypal.Buttons({
+                    createOrder: function (data, actions) {
+                        return actions.order.create({
+                            purchase_units: [{
+                                amount: {
+                                    value: @serviceprice
+                            }
+                            }]
+                        });
+                    },
+                    onApprove: function (data, actions) {
+                        return actions.order.capture().then(function (details) {
+                            alert('Payment accepted, click Confirm and Continue to proceed');
+
+
+                            // Call your server to save the transaction
+                            return fetch('/paypal-transaction-complete', {
+                                method: 'post',
+                                headers: {
+                                    'content-type': 'application/json'
+                                },
+                                body: JSON.stringify({
+                                    orderID: data.orderID
+                                })
+                            });
+                        });
+                    }
+                }).render('#paypal-button-container');
+
+
+
+
+        </script>
+
+
+
+
+    </div>
+</body>
+<div style="text-align:center">
+    <form method="post">
+        <input type="submit" value="Confirm and Continue" asp-page-handler="CardPayment" class="btn btn-default" id="button" />
+    </form>
+</div>
+<form>
+    <div style="text-align:left" class="form-group">
+        <a asp-page="BookingReview" asp-route-id="@HttpContext.Session.GetString(ProfileModel.SessionKeySelectedSitterID)" id="profileheader">Back to booking review</a>
+    </div>
+</form>

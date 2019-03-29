@@ -1,0 +1,52 @@
+﻿@page
+@model PetPals.Pages.AnimalExperiences.IndexModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Animal Experience";
+}
+
+<h2 id="profileheader">Your Animal Experience</h2>
+<p id="profileheader">Please add in animals you have experience with to display on your profile</p>
+<!DOCTYPE html>
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+</head>
+<body>
+    <p>
+        <a asp-page="Create"  id="profileheader">Add Animal</a>
+    </p>
+    <table class="table">
+        <thead id="button">
+            <tr>
+                <th>
+                    Animal
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.AnimalExperience)
+            {
+                @if (item.SitterID == Convert.ToInt32(@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.AnimalType)
+                        </td>
+                        <td>
+                            <a asp-page="./Delete" id="profileheader" asp-route-id="@item.ExperienceID">Delete</a>
+                        </td>
+                    </tr>
+                    }
+                }
+            </tbody>
+    </table>
+</body>
+
+
+
+    <a asp-page="../Sitters/Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)>Back to your Profile</a>
+
+</html>

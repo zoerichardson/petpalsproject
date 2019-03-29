@@ -1,0 +1,189 @@
+﻿@page
+@model PetPals.Pages.Sitters.IndexModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Dashboard";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h2 id="profileheader" style="text-align:center">Dashboard</h2>
+
+
+<div id="profilebutton"><a asp-page="/Services/Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)>View Your Services</a></div>
+<div id="profilebutton"><a asp-page="/Services/Create" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)>Add a Service</a></div>
+<div id="profilebutton"><a asp-page="/AnimalExperiences/Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)>Animal Experience</a></div>
+<div id="profilebutton"><a asp-page="/Reviews/SitterReview" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)>Your Reviews</a></div>
+
+<p id="profileheader">Please ensure to enter as much detail about your experience and services to make your profile more appealing to customers</p>
+
+<table class="table">
+    <thead id="button">
+        <tr>
+            <th>
+                Full Name
+            </th>
+            <th>
+                Address
+            </th>
+            <th>
+                Phone Number
+            </th>
+            <th>
+                Description of Experience
+            </th>
+            <th>
+                Catchment Area (Miles)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Sitters)
+        {
+
+            @if (item.ID == Convert.ToInt32(@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FullName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Street)
+                        @Html.DisplayFor(modelItem => item.Town)
+                        @Html.DisplayFor(modelItem => item.Postcode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Phonenumber)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CatchmentArea)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)>Edit Your Details</a>
+                    </td>
+                </tr>
+            }
+            else
+            {
+                @if (item.ID == Convert.ToInt32(@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.SitterRegisterModel.SessionKeySitterID)))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Street)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Town)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Postcode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Phonenumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Description)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CatchmentArea)
+                        </td>
+                        <td>
+                            <a asp-page="./Edit" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.SitterRegisterModel.SessionKeySitterID)>Edit Your Details</a>
+                        </td>
+                    </tr>
+                }
+            }
+        }
+    </tbody>
+</table>
+
+<h3 id="profileheader">Booked Services</h3>
+<table class="table">
+    <thead id="button">
+        <tr>
+            <th> Service </th>
+            <th> Date</th>
+            <th> Time</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Bookings)
+        {
+
+            if (item.SitterID == Convert.ToInt32(@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)))
+            {  
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Service)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Time)
+                        </td>
+                        <td>
+                            <a asp-page="./Booking" id="profileheader" asp-route-id="@item.CustomerID">View more information</a>
+                        </td>
+                    </tr>             
+
+            }
+        }
+    </tbody>
+</table>
+
+<h3 id="profileheader">Revenue Made</h3>
+<table class="table">
+    <thead id="button">
+        <tr>
+            <th> Total Revenue</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            @{
+                var totalCost = 0;
+                foreach (var item in Model.Bookings)
+                {
+                    if (item.SitterID == Convert.ToInt32(@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)))
+                    {
+                        totalCost = totalCost + item.TotalCost;
+                    }
+                }
+                <td>£ @totalCost</td>
+            }
+        </tr>
+    </tbody>
+</table>
+
+<h3 id="profileheader">Social Media</h3>
+<p id="profileheader">Add your social media to make you profile more appealing</p>
+
+<div>
+    <form method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="SocialMedia.ID" value=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID) />
+        <input type="hidden" asp-for="SocialMedia.SitterID" value=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)/>
+        <div class="form-group">
+            <input asp-for="SocialMedia.Facebook" class="Form-Field Form-Field-side-padding">
+            <img class=Form-icon-overlay src="~/images/facebook.png" style="width:50px;height:50px;">
+        </div>
+        <div class="form-group">
+            <input asp-for="SocialMedia.Twitter" class="Form-Field Form-Field-side-padding">
+            <img class=Form-icon-overlay src="~/images/twitter.png" style="width:50px;height:50px;">
+        </div>
+        <div class="form-group">
+            <input asp-for="SocialMedia.Instagram" class="Form-Field Form-Field-side-padding">
+            <img class=Form-icon-overlay src="~/images/instagram.jpg" style="width:50px;height:50px;">
+        </div>
+        <div class="form-group" style="text-align:left">
+            <button type="submit" class="btn btn-default" id="button">Save</button>
+        </div>
+    </form>
+</div>

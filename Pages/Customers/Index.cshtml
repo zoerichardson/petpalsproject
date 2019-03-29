@@ -1,0 +1,93 @@
+﻿@page
+@model PetPals.Pages.Customers.IndexModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Customer Profile";
+}
+
+
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h2 id="profileheader" style="text-align:center">Your Profile</h2>
+
+
+    <div id="profilebutton"><a   asp-page="/Pets/Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)>View your Pets</a></div>
+    <div  id="profilebutton"><a   asp-page="/Pets/Create" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)>Add a Pet</a></div>
+    <div  id="profilebutton"><a   asp-page="/Reviews/Create" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)>Write a Review</a></div>
+    <div id="profilebutton" ><a   asp-page="/Reviews/CustomerReview" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)>View your Reviews</a></div>
+    <div  id="profilebutton"><a   asp-page="Booking" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)>Bookings</a></div>
+
+
+<div class="profiletable">
+    <table class="table">
+        <thead id="button">
+            <tr>
+                <th>
+                    Full Name
+                </th>
+                <th>
+                    Address
+                </th>
+                <th>
+                    Phone Number
+                </th>
+                <th>
+                    Card Details
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Customer)
+            {
+                @if (item.ID == Convert.ToInt32(@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)))
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.FullName)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Street)
+                            @Html.DisplayFor(modelItem => item.Town)
+                            @Html.DisplayFor(modelItem => item.Postcode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Phonenumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CardNumber)
+                        </td>
+                        <td>
+                            <a asp-page="./Edit" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeyCustomerID)>Edit Your Details</a>
+                        </td>
+                    </tr>
+                }
+                else
+                {
+                    @if (item.ID == Convert.ToInt32(@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.RegisterModel.SessionKeyCustomerID)))
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.FullName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Street)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Town)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Postcode)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Phonenumber)
+                            </td>
+                            <td>
+                                <a id="profileheader" asp-page="./Edit" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.RegisterModel.SessionKeyCustomerID)>Edit Your Details</a>
+                            </td>
+                        </tr>
+                    }
+                }
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,48 @@
+﻿@page
+@model PetPals.Pages.Services.IndexModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Add Services";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h4 id="profileheader">Services You Provide</h4>
+<p>
+    <a asp-page="Create" id="profileheader">Add New Service</a>
+</p>
+<table class="table">
+    <thead id="button">
+        <tr>
+            <th>
+                Service
+            </th>
+            <th>
+                Price
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Services)
+        {
+            @if (item.SitterID == Convert.ToInt32(@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)))
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ServiceType)
+                    </td>
+                    <td>
+                        £ @Html.DisplayFor(modelItem => item.Price)
+                    </td>
+                    <td>
+                        <a asp-page="./Edit" id="profileheader" asp-route-id="@item.ServiceID">Edit Service Details</a> |
+                        <a asp-page="./Delete" id="profileheader" asp-route-id="@item.ServiceID">Remove Service</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+<div>
+    <a asp-page="../Sitters/Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)>Back to your Profile</a>
+</div>

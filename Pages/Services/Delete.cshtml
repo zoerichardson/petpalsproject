@@ -1,0 +1,34 @@
+﻿@page
+@model PetPals.Pages.Services.DeleteModel
+@using Microsoft.AspNetCore.Http
+@{
+    ViewData["Title"] = "Delete";
+}
+<link rel="stylesheet" type="text/css" href="~/css/style.css">
+<h2 id="profileheader">Delete</h2>
+
+<h3 id="profileheader">Are you sure you want to delete this?</h3>
+<div>
+    <h4 id="profileheader">Service</h4>
+    <hr />
+    <dl class="dl-horizontal" id="textcolour">
+        <dt>
+            @Html.DisplayNameFor(model => model.Service.ServiceType)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Service.ServiceType)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Service.Price)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Service.Price)
+        </dd>
+    </dl>
+
+    <form method="post">
+        <input type="hidden" asp-for="Service.ServiceID" />
+        <input type="submit" value="Delete" class="btn btn-default" id="button" /> |
+        <a asp-page="./Index" id="profileheader" asp-route-id=@HttpContext.Session.GetString(PetPals.Areas.Identity.Pages.Account.LoginModel.SessionKeySitterID)>Services</a>
+    </form>
+</div>
